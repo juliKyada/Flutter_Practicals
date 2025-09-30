@@ -4,36 +4,36 @@ class Practical7ProductCatalogApp extends StatelessWidget {
   const Practical7ProductCatalogApp({super.key});
 
   final List<String> productNames = const [
-    'Laptop',
-    'Phone',
-    'Headphones',
-    'Watch',
-    'Tablet',
-    'Camera',
-    'Speaker',
-    'Mouse'
+    'MacBook Pro M3',
+    'iPhone 15 Pro',
+    'AirPods Pro',
+    'Apple Watch Series 9',
+    'iPad Air',
+    'Canon EOS R6',
+    'JBL Charge 5',
+    'Logitech MX Master'
   ];
 
   final List<String> productPrices = const [
+    '\$1,999',
     '\$999',
-    '\$699',
-    '\$199',
-    '\$299',
-    '\$499',
-    '\$799',
-    '\$149',
-    '\$49'
+    '\$249',
+    '\$399',
+    '\$599',
+    '\$2,499',
+    '\$179',
+    '\$99'
   ];
 
-  final List<IconData> productIcons = const [
-    Icons.laptop,
-    Icons.phone_android,
-    Icons.headphones,
-    Icons.watch,
-    Icons.tablet,
-    Icons.camera_alt,
-    Icons.speaker,
-    Icons.mouse,
+  final List<String> productImages = const [
+    'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop',
+    'https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=300&fit=crop',
+    'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop',
+    'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&h=300&fit=crop',
+    'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop',
+    'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400&h=300&fit=crop',
+    'https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=300&fit=crop',
+    'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400&h=300&fit=crop',
   ];
 
   final List<Color> productColors = const [
@@ -56,17 +56,18 @@ class Practical7ProductCatalogApp extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: GridView.builder(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          childAspectRatio: 0.75,
         ),
         itemCount: productNames.length,
         itemBuilder: (context, index) {
           return Card(
-            elevation: 3,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            elevation: 2,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -75,65 +76,101 @@ class Practical7ProductCatalogApp extends StatelessWidget {
                     builder: (context) => ProductDetailPage(
                       name: productNames[index],
                       price: productPrices[index],
-                      icon: productIcons[index],
+                      imageUrl: productImages[index],
                       color: productColors[index],
                     ),
                   ),
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      height: 80,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        color: productColors[index].withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Icon(
-                        productIcons[index],
-                        size: 40,
-                        color: productColors[index],
-                      ),
-                    ),
-                    Text(
-                      productNames[index],
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      productPrices[index],
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: productColors[index],
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Added ${productNames[index]} to cart!'),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      child: Image.network(
+                        productImages[index],
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            color: Colors.grey[200],
+                            child: const Center(
+                              child: CircularProgressIndicator(),
                             ),
                           );
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: productColors[index],
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text('Add to Cart'),
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: productColors[index].withOpacity(0.1),
+                            child: Icon(
+                              Icons.image_not_supported,
+                              size: 40,
+                              color: productColors[index],
+                            ),
+                          );
+                        },
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            productNames[index],
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                productPrices[index],
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: productColors[index],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Added ${productNames[index]} to cart!'),
+                                      duration: const Duration(seconds: 1),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: productColors[index],
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: const Icon(
+                                    Icons.add_shopping_cart,
+                                    size: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           );
@@ -146,14 +183,14 @@ class Practical7ProductCatalogApp extends StatelessWidget {
 class ProductDetailPage extends StatelessWidget {
   final String name;
   final String price;
-  final IconData icon;
+  final String imageUrl;
   final Color color;
 
   const ProductDetailPage({
     super.key,
     required this.name,
     required this.price,
-    required this.icon,
+    required this.imageUrl,
     required this.color,
   });
 
@@ -173,16 +210,45 @@ class ProductDetailPage extends StatelessWidget {
             // Product Image Section
             Center(
               child: Container(
-                height: 200,
-                width: 200,
+                height: 250,
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                child: Icon(
-                  icon,
-                  size: 100,
-                  color: color,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        color: Colors.grey[200],
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: color.withOpacity(0.1),
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: 100,
+                          color: color,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
