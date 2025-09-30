@@ -31,11 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # UI and Design
+  # Basic dependencies only
   cupertino_icons: ^1.0.8
-  google_fonts: ^6.3.0
-  
-  # Data and Storage
   shared_preferences: ^2.5.3
   http: ^1.4.0
 
