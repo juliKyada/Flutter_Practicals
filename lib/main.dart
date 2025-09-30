@@ -133,7 +133,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Practical5StudentRecords(),
+                    builder: (context) => const Practical5StudentRecordsApp(),
                   ),
                 );
               },
@@ -169,7 +169,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Practical7ProductCatalog(),
+                    builder: (context) => const Practical7ProductCatalogApp(),
                   ),
                 );
               },
@@ -187,7 +187,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Practical8ApiData(),
+                    builder: (context) => const Practical8ApiDataApp(),
                   ),
                 );
               },
@@ -205,7 +205,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Practical9LoginAuth(),
+                    builder: (context) => const Practical9LoginAuthApp(),
                   ),
                 );
               },
@@ -223,7 +223,7 @@ class HomePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Practical10Deployment(),
+                    builder: (context) => const Practical10DeploymentInfo(),
                   ),
                 );
               },
