@@ -190,82 +190,34 @@ class Practical1DashboardPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                children: [
-                  Card(
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Practical1ProfilePage(username: username),
-                          ),
-                        );
-                      },
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.person, size: 50, color: Colors.blue),
-                          Text('Profile'),
-                        ],
-                      ),
+            Card(
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Practical1ProfilePage(username: username),
                     ),
-                  ),
-                  Card(
-                    child: InkWell(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Settings coming soon!')),
-                        );
-                      },
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.settings, size: 50, color: Colors.green),
-                          Text('Settings'),
-                        ],
+                  );
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(20.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.person, size: 40, color: Colors.blue),
+                      SizedBox(width: 20),
+                      Text(
+                        'View Profile',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                    ),
+                      Spacer(),
+                      Icon(Icons.arrow_forward_ios),
+                    ],
                   ),
-                  Card(
-                    child: InkWell(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Analytics coming soon!')),
-                        );
-                      },
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.analytics, size: 50, color: Colors.orange),
-                          Text('Analytics'),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Card(
-                    child: InkWell(
-                      onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Help coming soon!')),
-                        );
-                      },
-                      child: const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.help, size: 50, color: Colors.red),
-                          Text('Help'),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
+            const SizedBox(height: 20),
             
             SizedBox(
               width: double.infinity,
@@ -297,7 +249,7 @@ class Practical1ProfilePage extends StatelessWidget {
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [

@@ -49,9 +49,148 @@ class Practical8ApiDataApp extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PostDetailPage(
+                      title: postTitles[index],
+                      body: postBodies[index],
+                      postNumber: index + 1,
+                    ),
+                  ),
+                );
+              },
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class PostDetailPage extends StatelessWidget {
+  final String title;
+  final String body;
+  final int postNumber;
+
+  const PostDetailPage({
+    super.key,
+    required this.title,
+    required this.body,
+    required this.postNumber,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Post Details'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.blue.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    child: Text('$postNumber'),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.article, color: Colors.blue),
+                        SizedBox(width: 10),
+                        Text(
+                          'Content',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      body,
+                      style: const TextStyle(fontSize: 16, height: 1.5),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      children: [
+                        Icon(Icons.info, color: Colors.blue),
+                        SizedBox(width: 10),
+                        Text(
+                          'Post Information',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    ListTile(
+                      leading: const Icon(Icons.numbers),
+                      title: const Text('Post ID'),
+                      subtitle: Text('#$postNumber'),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.calendar_today),
+                      title: const Text('Date'),
+                      subtitle: const Text('September 2024'),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.person),
+                      title: const Text('Author'),
+                      subtitle: const Text('Flutter Team'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
