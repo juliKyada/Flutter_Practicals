@@ -45,7 +45,7 @@ class _Practical2TemperatureConverterState extends State<Practical2TemperatureCo
         backgroundColor: Colors.orange,
         foregroundColor: Colors.white,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
@@ -135,7 +135,7 @@ class _Practical2TemperatureConverterState extends State<Practical2TemperatureCo
               ),
             ),
             
-            const Spacer(),
+            const SizedBox(height: 30),
             
             // Quick Reference
             Card(
