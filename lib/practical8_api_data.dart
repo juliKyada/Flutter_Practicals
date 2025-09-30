@@ -1,104 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-/// Practical 8: REST API Data Display (FutureBuilder)
-
-/// Data model for Post
-class Post {
-  final int id;
-  final String title;
-  final String body;
-  Post({required this.id, required this.title, required this.body});
-
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      id: json['id'] as int,
-      title: json['title'] as String,
-      body: json['body'] as String,
-    );
-  }
-}
-
-class Practical8ApiDataApp extends StatefulWidget {
+class Practical8ApiDataApp extends StatelessWidget {
   const Practical8ApiDataApp({super.key});
 
-  @override
-  State<Practical8ApiDataApp> createState() => _Practical8ApiDataAppState();
-}
+  final List<String> postTitles = const [
+    'Welcome to Flutter',
+    'Learning Dart Programming',
+    'Building Mobile Apps',
+    'State Management Guide',
+    'Widget Documentation',
+    'Flutter Best Practices',
+  ];
 
-class _Practical8ApiDataAppState extends State<Practical8ApiDataApp> {
-  late Future<List<Post>> _posts;
-
-  @override
-  void initState() {
-    super.initState();
-    _posts = _fetchPosts();
-  }
-
-  Future<List<Post>> _fetchPosts() async {
-    final http.Response response = await http.get(
-      Uri.parse('https://jsonplaceholder.typicode.com/posts'),
-    );
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonList = jsonDecode(response.body) as List<dynamic>;
-      return jsonList
-          .map((dynamic item) => Post.fromJson(item as Map<String, dynamic>))
-          .toList();
-    } else {
-      throw Exception('Failed to load posts');
-    }
-  }
+  final List<String> postBodies = const [
+    'Flutter is Google\'s UI toolkit for building beautiful apps.',
+    'Dart is a client-optimized language for fast apps on any platform.',
+    'Create amazing mobile applications with Flutter framework.',
+    'Learn how to manage state effectively in Flutter apps.',
+    'Explore the rich set of widgets available in Flutter.',
+    'Follow these best practices to write better Flutter code.',
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Practical 8: API Data Display',
-          style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
-            fontSize: 20,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
+        title: const Text('Posts List'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
       ),
-      body: FutureBuilder<List<Post>>(
-        future: _posts,
-        builder: (BuildContext context, AsyncSnapshot<List<Post>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data?.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Post post = snapshot.data![index];
-                return ListTile(
-                  title: Text(post.title),
-                  subtitle: Text(
-                    post.body,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                );
-              },
-            );
-          } else {
-            return const Center(child: Text('No data found'));
-          }
+      body: ListView.builder(
+        itemCount: postTitles.length,
+        itemBuilder: (context, index) {
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.blue,
+                child: Text('${index + 1}'),
+              ),
+              title: Text(
+                postTitles[index],
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                postBodies[index],
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            ),
+          );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _posts = _fetchPosts();
-          });
-        },
-        child: const Icon(Icons.refresh),
       ),
     );
   }

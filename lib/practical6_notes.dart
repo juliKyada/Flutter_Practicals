@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-/// Practical 6: Notes App (Persistent Storage)
 class Practical6NotesApp extends StatefulWidget {
   const Practical6NotesApp({super.key});
 
@@ -10,47 +8,27 @@ class Practical6NotesApp extends StatefulWidget {
 }
 
 class _Practical6NotesAppState extends State<Practical6NotesApp> {
-  late SharedPreferences _prefs;
-  List<String> _notes = <String>[];
-  final TextEditingController _noteController = TextEditingController();
+  List<String> notes = [];
+  TextEditingController noteController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _loadNotes();
-  }
-
-  Future<void> _loadNotes() async {
-    _prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _notes = _prefs.getStringList('notes') ?? <String>[];
-    });
-  }
-
-  Future<void> _saveNotes() async {
-    await _prefs.setStringList('notes', _notes);
-  }
-
-  void _addNote() {
-    if (_noteController.text.isNotEmpty) {
+  void addNote() {
+    if (noteController.text.isNotEmpty) {
       setState(() {
-        _notes.add(_noteController.text);
-        _noteController.clear();
-        _saveNotes();
+        notes.add(noteController.text);
+        noteController.clear();
       });
     }
   }
 
-  void _deleteNote(int index) {
+  void deleteNote(int index) {
     setState(() {
-      _notes.removeAt(index);
-      _saveNotes();
+      notes.removeAt(index);
     });
   }
 
   @override
   void dispose() {
-    _noteController.dispose();
+    noteController.dispose();
     super.dispose();
   }
 
@@ -58,48 +36,57 @@ class _Practical6NotesAppState extends State<Practical6NotesApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Practical 6: Notes App',
-          style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
-            fontSize: 20,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
+        title: const Text('Notes App'),
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
       ),
       body: Column(
-        children: <Widget>[
+        children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
-              children: <Widget>[
+              children: [
                 Expanded(
                   child: TextField(
-                    controller: _noteController,
+                    controller: noteController,
                     decoration: const InputDecoration(
-                      hintText: 'Enter new note...',
+                      hintText: 'Enter your note...',
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10.0),
-                ElevatedButton(onPressed: _addNote, child: const Text('Add')),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: addNote,
+                  child: const Text('Add'),
+                ),
               ],
             ),
           ),
           Expanded(
-            child: _notes.isEmpty
-                ? const Center(child: Text('No notes yet!'))
+            child: notes.isEmpty
+                ? const Center(
+                    child: Text(
+                      'No notes yet!\nAdd your first note above.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  )
                 : ListView.builder(
-                    itemCount: _notes.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return ListTile(
-                        title: Text(_notes[index]),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          onPressed: () => _deleteNote(index),
+                    itemCount: notes.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.indigo,
+                            child: Text('${index + 1}'),
+                          ),
+                          title: Text(notes[index]),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => deleteNote(index),
+                          ),
                         ),
                       );
                     },

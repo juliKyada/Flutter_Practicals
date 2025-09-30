@@ -1,35 +1,30 @@
 import 'package:flutter/material.dart';
 
-/// Practical 4: Form-based Registration App
-class Practical4RegistrationApp extends StatefulWidget {
-  const Practical4RegistrationApp({super.key});
+// Practical 4: Simple Registration Form
+class Practical4RegistrationForm extends StatefulWidget {
+  const Practical4RegistrationForm({super.key});
 
   @override
-  State<Practical4RegistrationApp> createState() =>
-      _Practical4RegistrationAppState();
+  State<Practical4RegistrationForm> createState() => _Practical4RegistrationFormState();
 }
 
-class _Practical4RegistrationAppState extends State<Practical4RegistrationApp> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+class _Practical4RegistrationFormState extends State<Practical4RegistrationForm> {
+  final formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
-
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // Simulate form submission
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Registration Successful!')));
+  void submitForm() {
+    if (formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Registration Successful!')),
+      );
+      // Clear form
+      nameController.clear();
+      emailController.clear();
+      passwordController.clear();
+      confirmPasswordController.clear();
     }
   }
 
@@ -37,22 +32,15 @@ class _Practical4RegistrationAppState extends State<Practical4RegistrationApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Practical 4: Registration App',
-          style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
-            fontSize: 20,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
+        title: const Text('Registration Form'),
+        backgroundColor: Colors.purple,
+        foregroundColor: Colors.white,
       ),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -65,7 +53,22 @@ class _Practical4RegistrationAppState extends State<Practical4RegistrationApp> {
                 ),
                 const SizedBox(height: 30.0),
                 TextFormField(
-                  controller: _emailController,
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                  validator: (String? value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  controller: emailController,
                   decoration: const InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(),
@@ -83,7 +86,7 @@ class _Practical4RegistrationAppState extends State<Practical4RegistrationApp> {
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
-                  controller: _passwordController,
+                  controller: passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: 'Password',
@@ -102,7 +105,7 @@ class _Practical4RegistrationAppState extends State<Practical4RegistrationApp> {
                 ),
                 const SizedBox(height: 16.0),
                 TextFormField(
-                  controller: _confirmPasswordController,
+                  controller: confirmPasswordController,
                   obscureText: true,
                   decoration: const InputDecoration(
                     labelText: 'Confirm Password',
@@ -113,7 +116,7 @@ class _Practical4RegistrationAppState extends State<Practical4RegistrationApp> {
                     if (value == null || value.isEmpty) {
                       return 'Please confirm your password';
                     }
-                    if (value != _passwordController.text) {
+                    if (value != passwordController.text) {
                       return 'Passwords do not match';
                     }
                     return null;
@@ -121,22 +124,21 @@ class _Practical4RegistrationAppState extends State<Practical4RegistrationApp> {
                 ),
                 const SizedBox(height: 30.0),
                 ElevatedButton(
-                  onPressed: _submitForm,
+                  onPressed: submitForm,
                   child: const Text('Register'),
                 ),
                 const SizedBox(height: 10.0),
                 TextButton(
                   onPressed: () {
-                    _formKey.currentState?.reset();
-                    _emailController.clear();
-                    _passwordController.clear();
-                    _confirmPasswordController.clear();
+                    formKey.currentState?.reset();
+                    nameController.clear();
+                    emailController.clear();
+                    passwordController.clear();
+                    confirmPasswordController.clear();
                   },
-                  child: Text(
+                  child: const Text(
                     'Clear Form',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                    style: TextStyle(color: Colors.purple),
                   ),
                 ),
               ],

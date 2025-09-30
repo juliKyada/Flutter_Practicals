@@ -1,15 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Practical 3: Dynamic To-Do App (setState)
-
-/// Data model for Todo items
-class TodoItem {
-  String task;
-  bool isCompleted;
-
-  TodoItem({required this.task, this.isCompleted = false});
-}
-
+// Practical 3: Simple Todo List App
 class Practical3TodoApp extends StatefulWidget {
   const Practical3TodoApp({super.key});
 
@@ -18,39 +9,30 @@ class Practical3TodoApp extends StatefulWidget {
 }
 
 class _Practical3TodoAppState extends State<Practical3TodoApp> {
-  final List<TodoItem> _todoItems = <TodoItem>[
-    TodoItem(task: 'Learn Flutter Basics'),
-    TodoItem(task: 'Build a To-Do App', isCompleted: true),
-    TodoItem(task: 'Explore State Management'),
-  ];
+  final List<String> tasks = ['Learn Flutter', 'Build an app', 'Practice coding'];
+  final List<bool> completed = [false, true, false];
+  final TextEditingController taskController = TextEditingController();
 
-  final TextEditingController _taskController = TextEditingController();
-
-  @override
-  void dispose() {
-    _taskController.dispose();
-    super.dispose();
-  }
-
-  void _addTask() {
-    final String newTask = _taskController.text.trim();
-    if (newTask.isNotEmpty) {
+  void addTask() {
+    if (taskController.text.isNotEmpty) {
       setState(() {
-        _todoItems.add(TodoItem(task: newTask));
-        _taskController.clear();
+        tasks.add(taskController.text);
+        completed.add(false);
+        taskController.clear();
       });
     }
   }
 
-  void _toggleTaskCompletion(int index) {
+  void toggleTask(int index) {
     setState(() {
-      _todoItems[index].isCompleted = !_todoItems[index].isCompleted;
+      completed[index] = !completed[index];
     });
   }
 
-  void _deleteTask(int index) {
+  void deleteTask(int index) {
     setState(() {
-      _todoItems.removeAt(index);
+      tasks.removeAt(index);
+      completed.removeAt(index);
     });
   }
 
@@ -58,16 +40,9 @@ class _Practical3TodoAppState extends State<Practical3TodoApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Practical 3: Dynamic To-Do App',
-          style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
-            fontSize: 20,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
+        title: const Text('Todo List'),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
       ),
       body: Column(
         children: <Widget>[
@@ -77,52 +52,86 @@ class _Practical3TodoAppState extends State<Practical3TodoApp> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
-                    controller: _taskController,
+                    controller: taskController,
                     decoration: const InputDecoration(
-                      hintText: 'Enter new task...',
+                      hintText: 'Add a new task...',
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10.0),
-                ElevatedButton(onPressed: _addTask, child: const Text('Add')),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: addTask,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text('Add'),
+                ),
               ],
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: _todoItems.length,
-              itemBuilder: (BuildContext context, int index) {
-                final TodoItem item = _todoItems[index];
-                return ListTile(
-                  title: Text(
-                    item.task,
-                    style: TextStyle(
-                      decoration: item.isCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                    ),
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Checkbox(
-                        value: item.isCompleted,
-                        onChanged: (bool? value) {
-                          _toggleTaskCompletion(index);
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () {
-                          _deleteTask(index);
-                        },
-                      ),
-                    ],
-                  ),
-                );
-              },
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Total: ${tasks.length}',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Done: ${completed.where((c) => c).length}',
+                  style: const TextStyle(fontSize: 16, color: Colors.green),
+                ),
+              ],
             ),
+          ),
+          
+          const SizedBox(height: 10),
+          
+          Expanded(
+            child: tasks.isEmpty
+                ? const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.task_alt, size: 80, color: Colors.grey),
+                        SizedBox(height: 16),
+                        Text(
+                          'No tasks yet!',
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                        child: ListTile(
+                          leading: Checkbox(
+                            value: completed[index],
+                            onChanged: (_) => toggleTask(index),
+                          ),
+                          title: Text(
+                            tasks[index],
+                            style: TextStyle(
+                              decoration: completed[index]
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                              color: completed[index] ? Colors.grey : Colors.black,
+                            ),
+                          ),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => deleteTask(index),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
           ),
         ],
       ),
