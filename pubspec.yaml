@@ -34,19 +34,10 @@ dependencies:
   # UI and Design
   cupertino_icons: ^1.0.8
   google_fonts: ^6.3.0
-  animations: ^2.0.11
-  flutter_animate: ^4.5.0
-  glassmorphism: ^3.0.0
-  lottie: ^3.1.2
-  flutter_staggered_animations: ^1.1.1
   
   # Data and Storage
   shared_preferences: ^2.5.3
   http: ^1.4.0
-  
-  # Icons and Graphics
-  flutter_svg: ^2.0.10+1
-  cached_network_image: ^3.3.1
 
 dev_dependencies:
   flutter_test:
