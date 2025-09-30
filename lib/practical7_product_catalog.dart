@@ -56,18 +56,18 @@ class Practical7ProductCatalogApp extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: GridView.builder(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(8.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 0.75,
+          crossAxisCount: 3,
+          crossAxisSpacing: 6,
+          mainAxisSpacing: 6,
+          childAspectRatio: 0.65,
         ),
         itemCount: productNames.length,
         itemBuilder: (context, index) {
           return Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 1,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             child: InkWell(
               onTap: () {
                 Navigator.push(
@@ -88,7 +88,7 @@ class Practical7ProductCatalogApp extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: ClipRRect(
-                      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
                       child: Image.network(
                         productImages[index],
                         fit: BoxFit.cover,
@@ -117,7 +117,7 @@ class Practical7ProductCatalogApp extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(4.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,21 +125,24 @@ class Practical7ProductCatalogApp extends StatelessWidget {
                           Text(
                             productNames[index],
                             style: const TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ),
-                            maxLines: 2,
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                productPrices[index],
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: productColors[index],
+                              Expanded(
+                                child: Text(
+                                  productPrices[index],
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: productColors[index],
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
                               ),
                               InkWell(
@@ -152,14 +155,14 @@ class Practical7ProductCatalogApp extends StatelessWidget {
                                   );
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.all(4),
+                                  padding: const EdgeInsets.all(3),
                                   decoration: BoxDecoration(
                                     color: productColors[index],
-                                    borderRadius: BorderRadius.circular(6),
+                                    borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: const Icon(
                                     Icons.add_shopping_cart,
-                                    size: 16,
+                                    size: 12,
                                     color: Colors.white,
                                   ),
                                 ),
